@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lington-puffy
+spec:
+  selector:
+    app: lington-puffy
+  ports:
+    - port: 80
+      targetPort: 8080

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lington-puffy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lington-puffy
+  template:
+    metadata:
+      labels:
+        app: lington-puffy
+    spec:
+      containers:
+        - name: app
+          image: lington-puffy-app1
+          ports:
+            - containerPort: 8080
