@@ -8,7 +8,7 @@ spec:
 
   source:
     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
-    targetRevision: main
+    targetRevision: HEAD
     path: overlays/prod
 
   destination:

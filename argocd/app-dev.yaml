@@ -103,7 +103,7 @@ metadata:
 
   annotations:
     # Track this image (alias = app)
-    argocd-image-updater.argoproj.io/image-list: app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
+    argocd-image-updater.argoproj.io/image-list: 468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
 
     # Auto-update tags using semver
     argocd-image-updater.argoproj.io/app.update-strategy: semver
@@ -118,7 +118,7 @@ spec:
 
   source:
     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
-    targetRevision: main
+    targetRevision: HEAD
     path: overlays/dev
     kustomize: {}       
 
