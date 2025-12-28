@@ -1,3 +1,0 @@
-kustomize:
-  images:
-  - 468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1:99.99.113
