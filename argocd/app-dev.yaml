@@ -95,26 +95,25 @@
 #       prune: true
 #       selfHeal: true
 
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: lington-puffy-dev
   namespace: argocd
+
   annotations:
-    # Track this ECR image (alias = app)
+    # Track this image (alias = app)
     argocd-image-updater.argoproj.io/image-list: app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
 
-    # Strategy – allow semantic version upgrades
+    # Auto-update tags using semver
     argocd-image-updater.argoproj.io/app.update-strategy: semver
 
     # Only match tags like 99.99.xxx
     argocd-image-updater.argoproj.io/app.allow-tags: regexp:^99\.99\.\d+$
 
-    # Write updated tag back to Git
+    # Commit back to Git
     argocd-image-updater.argoproj.io/write-back-method: git
-
-    # Commit to main branch
+    argocd-image-updater.argoproj.io/write-back-target: kustomization
     argocd-image-updater.argoproj.io/git-branch: main
 spec:
   project: default
@@ -123,7 +122,8 @@ spec:
     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
     targetRevision: main
     path: overlays/dev
-    kustomize: {}   # 👈 REQUIRED for image-updater to recognise Kustomize apps
+
+    kustomize: {}       
 
   destination:
     server: https://kubernetes.default.svc
@@ -132,7 +132,6 @@ spec:
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-
     automated:
       prune: true
       selfHeal: true
