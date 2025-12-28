@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
     targetRevision: main
-    path: envs/staging
+    path: overlays/staging
 
   destination:
     server: https://kubernetes.default.svc

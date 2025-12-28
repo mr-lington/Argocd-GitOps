@@ -55,37 +55,84 @@
 
 
 
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: lington-puffy-dev
+#   namespace: argocd
+#   annotations:
+#     # Tell image updater which image to track
+#     argocd-image-updater.argoproj.io/image-list: |
+#       app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
+
+#     # Use semantic versioning
+#     argocd-image-updater.argoproj.io/app.update-strategy: semver
+
+#     # Only allow tags >= current dev baseline
+#     argocd-image-updater.argoproj.io/app.allow-tags: regexp:^99\.99\.\d+$
+
+#     # Write updates back to Git
+#     argocd-image-updater.argoproj.io/write-back-method: git
+
+#     # Which branch to commit to
+#     argocd-image-updater.argoproj.io/git-branch: main
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
+#     targetRevision: main
+#     path: overlays/dev
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: dev
+
+#   syncPolicy:
+#     syncOptions:
+#       - CreateNamespace=true
+
+
+#     automated:
+#       prune: true
+#       selfHeal: true
+
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: lington-puffy-dev
   namespace: argocd
   annotations:
-    # Tell image updater which image to track
-    argocd-image-updater.argoproj.io/image-list: |
-      app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
+    # Track this ECR image (alias = app)
+    argocd-image-updater.argoproj.io/image-list: app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
 
-    # Use semantic versioning
+    # Strategy – allow semantic version upgrades
     argocd-image-updater.argoproj.io/app.update-strategy: semver
 
-    # Only allow tags >= current dev baseline
+    # Only match tags like 99.99.xxx
     argocd-image-updater.argoproj.io/app.allow-tags: regexp:^99\.99\.\d+$
 
-    # Write updates back to Git
+    # Write updated tag back to Git
     argocd-image-updater.argoproj.io/write-back-method: git
 
-    # Which branch to commit to
+    # Commit to main branch
     argocd-image-updater.argoproj.io/git-branch: main
 spec:
   project: default
+
   source:
     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
     targetRevision: main
-    path: envs/dev
+    path: overlays/dev
+    kustomize: {}   # 👈 REQUIRED for image-updater to recognise Kustomize apps
+
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
+
   syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+
     automated:
       prune: true
       selfHeal: true
