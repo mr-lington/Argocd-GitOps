@@ -18,36 +18,73 @@
 #       selfHeal: true
 
 
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: lington-puffy-dev
+#   namespace: argocd
+#   annotations:
+#     # Image updater: watch this image
+#     argocd-image-updater.argoproj.io/image-list: app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
+
+#     # Only allow dev tags (safe!)
+#     argocd-image-updater.argoproj.io/app.allow-tags: regexp:^dev-.*
+
+#     # Always pick the newest matching tag
+#     argocd-image-updater.argoproj.io/app.update-strategy: newest-build
+
+#     # Write changes back to Git (true GitOps)
+#     argocd-image-updater.argoproj.io/write-back-method: git
+#     argocd-image-updater.argoproj.io/write-back-target: kustomization
+# spec:
+#   project: default
+
+#   source:
+#     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
+#     targetRevision: main
+#     path: envs/dev
+
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: dev
+
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+
+
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: lington-puffy-dev
   namespace: argocd
   annotations:
-    # Image updater: watch this image
-    argocd-image-updater.argoproj.io/image-list: app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
+    # Tell image updater which image to track
+    argocd-image-updater.argoproj.io/image-list: |
+      app=468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
 
-    # Only allow dev tags (safe!)
-    argocd-image-updater.argoproj.io/app.allow-tags: regexp:^dev-.*
+    # Use semantic versioning
+    argocd-image-updater.argoproj.io/app.update-strategy: semver
 
-    # Always pick the newest matching tag
-    argocd-image-updater.argoproj.io/app.update-strategy: newest-build
+    # Only allow tags >= current dev baseline
+    argocd-image-updater.argoproj.io/app.allow-tags: regexp:^99\.99\.\d+$
 
-    # Write changes back to Git (true GitOps)
+    # Write updates back to Git
     argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/write-back-target: kustomization
+
+    # Which branch to commit to
+    argocd-image-updater.argoproj.io/git-branch: main
 spec:
   project: default
-
   source:
     repoURL: https://github.com/mr-lington/Argocd-GitOps.git
     targetRevision: main
     path: envs/dev
-
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
-
   syncPolicy:
     automated:
       prune: true
