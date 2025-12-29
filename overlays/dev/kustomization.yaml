@@ -4,4 +4,4 @@ resources:
   - ../../base
 images:
   - name: 468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
-    newTag: 99.99.120
+    newTag: 99.99.121
