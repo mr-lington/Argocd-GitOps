@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: my-app
-          image: 468887949677.dkr.ecr.eu-west-3.amazonaws.com/my-app-app1
+          image: 468887949677.dkr.ecr.eu-west-3.amazonaws.com/lington-puffy-app1
           ports:
             - containerPort: 8080
